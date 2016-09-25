@@ -5,7 +5,7 @@ Rad = 10
 def idle_function():
     # write here your code, which must evaluate every tick
     command = ""
-#    command = input() # uncomment it to move the circle, but after that char_func won't work
+    command = input() # uncomment it to move the circle, but after that char_func won't work
     if (command == 'left'):
         current_coords[0] -= 10
     elif (command == 'right'):
