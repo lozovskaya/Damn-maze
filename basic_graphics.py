@@ -1,5 +1,9 @@
 from tkinter import * 
 
+def close(event):
+    root.destroy()
+    root.quit()
+
 
 def player(x1, y1, x2, y2):
     player = canvas.create_oval(x1, y1, x2, y2, fill="blue")
@@ -14,6 +18,9 @@ def maze(x1, y1, x2, y2):
 
     
 root = Tk() 
-canvas = Canvas(root, width=500, height=500)
+canvas = Canvas(root, width=300, height=300)
 canvas.pack()
+button = Button(root, text="Exit", width=15, height=3, bg="white", fg="black") 
+button.place(x=100, y=120)
+button.bind("<Button-1>", close)
 root.mainloop()
