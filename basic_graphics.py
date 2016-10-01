@@ -4,7 +4,6 @@ def close(event):
     root.destroy()
     root.quit()
 
-
 def player(x1, y1, x2, y2):
     player = canvas.create_oval(x1, y1, x2, y2, fill="blue")
     
