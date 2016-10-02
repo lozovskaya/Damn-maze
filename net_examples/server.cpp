@@ -1,13 +1,23 @@
 /* A simple server in the internet domain using TCP
    The port number is passed as an argument */
+#ifdef _WIN32
+	#pragma comment ( lib, "ws2_32.lib" )
+	#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
 #include <cstdio> //printf
 #include <cstring> //memcpy
 #include <iostream>
 #include <cstdlib>
 //#include <cunistd> //read write functions
-#include <netinet/in.h> // all socket functions
 #ifndef _WIN32
+	#include <netinet/in.h> // all socket functions
     typedef int SOCKET;
+#else
+	#define MSG_CONFIRM 0
+	#define SHUT_RDWR 0
+	#include <winsock2.h>
+	#include <windows.h>
+	typedef int socklen_t;
 #endif
 
 
@@ -68,7 +78,7 @@ int main()
         printf("ERROR writing to socket\n");
         return 0;
      }
-     shutdown(client_socket, SHUT_RDWR);
-     shutdown(my_socket, SHUT_RDWR);
+     closesocket(client_socket);
+     closesocket(my_socket);
      return 0; 
 }
