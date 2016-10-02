@@ -1,9 +1,10 @@
 /* A simple server in the internet domain using TCP
    The port number is passed as an argument */
-#include <stdio.h> //printf
-#include <string.h> //memcpy
-#include <stdlib.h>
-//#include <unistd.h> //read write functions
+#include <cstdio> //printf
+#include <cstring> //memcpy
+#include <iostream>
+#include <cstdlib>
+//#include <cunistd> //read write functions
 #include <netinet/in.h> // all socket functions
 #ifndef _WIN32
     typedef int SOCKET;
@@ -24,7 +25,7 @@ int main()
         printf("ERROR opening socket");
         return 0;
      }
-     bzero((char *) &serv_addr, sizeof(serv_addr)); //  Заполнить нулями байты, начиная с того, 
+     memset((char *) &serv_addr, 0, sizeof(serv_addr)); //  Заполнить нулями байты, начиная с того, 
 //                                                  //  на который указывает первый параметр (указатель), 
                                                     //  и всего (второй параметр) байтов
      
@@ -46,7 +47,7 @@ int main()
           printf("ERROR on accept\n");
           return 0;
      }
-     bzero(buffer, 256);
+     memset(buffer, 0, 256);
      int n = recv(client_socket, buffer, 255, MSG_CONFIRM); // getting data from client_socket, writing it in buffer, max_amount of data is 255 bytes
      if (n < 0) // n - amount of bytes you just have got. if it is negative, something is bad
      {
