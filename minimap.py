@@ -1,4 +1,4 @@
-import png
+import dependencies.png as png
 
 
 def get_color(x):
