@@ -71,7 +71,7 @@ int dial_with_client() {
     }
     printf("Here is the message: %d %s\n", n, buffer);
     sprintf(buffer, "I got your message");
-    n = send(client_socket, buffer, strlen(buff), MSG_CONFIRM); // write to the first parameter, 
+    n = send(client_socket, buffer, strlen(buffer), MSG_CONFIRM); // write to the first parameter, 
                                                                     // from second parameter, amount of bytes - third parameter
     n = recv(client_socket, buffer, BUFF_SIZE - 1, MSG_CONFIRM);
     int number;
