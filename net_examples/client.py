@@ -3,7 +3,11 @@ from sys import byteorder
 ip = "127.0.0.1"
 Port = 5050
 sock = socket.socket()
-sock.connect((ip, Port))
+try:
+    sock.connect((ip, Port))   
+except:
+    print("Ты сервер не поднял!!")
+    exit(0)
 #передача строки
 sock.send(bytearray("Hello, world".encode("utf-8")))
 data = sock.recv(255)
