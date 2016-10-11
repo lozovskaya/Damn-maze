@@ -1,17 +1,18 @@
 import socket
 from sys import byteorder
 ip = "127.0.0.1"
-Port = 5050
+Port = 5051
 sock = socket.socket()
-try:
-    sock.connect((ip, Port))   
-except:
-    print("Ты сервер не поднял!!")
-    exit(0)
-#передача строки
-sock.send(bytearray("Hello, world".encode("utf-8")))
-data = sock.recv(255)
+while (sock.connect_ex((ip, Port))):
+    Port += 1
+        
+print(sock.send(bytearray([1, 1]), socket.MSG_CONFIRM))
+data = sock.recv(255, socket.MSG_CONFIRM)
 print(data, len(data))
+height, width = int.from_bytes(data[:4], byteorder), int.from_bytes(data[4:8], byteorder)
+arr = [[int.from_bytes(data[8 + i * width * 4 + j * 4:12 + i * width * 4 + j * 4], byteorder) for j in range(width)] 
+for i in range(height)]
+print('\n'.join(map(str, arr)))
 #передача числа
 print("type a number")
 n = int(input())

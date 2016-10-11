@@ -2,6 +2,7 @@
 #define FIELD_H
 
 #include <iostream>
+#include <cstring>
 #include <vector>
 
 enum class cell_type {
@@ -40,6 +41,20 @@ struct field {
             }
             out << '\n';
         }
+    }
+
+    int write_bytes(char* buff) const {
+        char* last = buff;
+        memcpy(buff, &height, 2 * sizeof(int));
+        buff += 2 * sizeof(int);
+        for (const auto &v : data) {
+            for (const auto &elem : v) {
+                memcpy(buff, &elem, sizeof(elem));
+                buff += sizeof(elem);
+            }
+        }
+        
+        return buff - last;
     }
 };
 
