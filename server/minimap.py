@@ -13,7 +13,10 @@ def get_pixel(i, j):
     else:
         return isWall[i // width][j // width]
 
-f = open("field.txt")
+try:
+    f = open("field.txt")
+except:
+    f = open("field")
 n, m = map(int, f.readline().rstrip().split())
 width = 1000 // (n + m)
 isWall = [0 for i in range(n)]

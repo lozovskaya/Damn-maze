@@ -1,3 +1,5 @@
-field.png
-dependencies/__pycache__
+server/field.png
+server/main
+server/dependencies/__pycache__
+
 net_examples/server
