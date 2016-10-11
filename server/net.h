@@ -3,7 +3,7 @@
 char buffer[BUFF_SIZE];
 SOCKET my_socket;
 
-int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, int usec = 10000 * 100) {
+int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, int usec = 10000) {
     fd_set readfds;
     FD_ZERO(&readfds);
     FD_SET(client_socket, &readfds);
@@ -19,8 +19,7 @@ int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, 
 int init_net() {
     struct sockaddr_in serv_addr;
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
-    if (my_socket < 0) 
-    {
+    if (my_socket < 0) {
         printf("ERROR opening socket");
         return -1;
     }
@@ -44,19 +43,16 @@ int connect_with_client(SOCKET &client_socket) {
     client_length = sizeof(client_addr);
     client_socket = accept(my_socket, (struct sockaddr *) &client_addr, &client_length); 
                             // at previous line you wait until one client connects with you
-    if (client_socket < 0)
-    {
+    if (client_socket < 0) {
         printf("ERROR on accept\n");
         return -1;
     }
-
     return 0;
 }
 
 int update_net(SOCKET client_socket, const field &F) {
     printf("wait\n");
     int size = get_data_timeout(client_socket, buffer, BUFF_SIZE - 1);
-    //int size = recv(client_socket, buffer, BUFF_SIZE - 1, MSG_CONFIRM);
     printf("get %d\n", size);
     if (size <= 0) {
         return 0;

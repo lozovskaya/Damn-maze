@@ -13,9 +13,16 @@ print(sock.send(bytearray([1]), socket.MSG_CONFIRM))
 #it's a query for server, it understands, that we need field after that message
 data = sock.recv(255, socket.MSG_CONFIRM)
 print(data, len(data))
-height, width = int.from_bytes(data[:4], byteorder), int.from_bytes(data[4:8], byteorder)
-arr = [[int.from_bytes(data[8 + i * width * 4 + j * 4:12 + i * width * 4 + j * 4], byteorder) for j in range(width)] 
-for i in range(height)]
+curr_idx = 0
+height = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
+curr_idx += 4
+width = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
+curr_idx += 4
+arr = [[0] * width for i in range(height)]
+for i in range(height):
+    for j in range(width):
+        arr[i][j] = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
+        curr_idx += 4
 print('\n'.join(map(str, arr)))
 
 #число из байт - int.from_bytes(bytarray, byteorder)
