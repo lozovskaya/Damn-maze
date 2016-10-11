@@ -1,36 +1,17 @@
-#ifdef _WIN32
-	#pragma comment ( lib, "ws2_32.lib" )
-	#define _WINSOCK_DEPRECATED_NO_WARNINGS
-	#define MSG_CONFIRM 0
-	#define SHUT_RDWR 0
-	#include <winsock2.h>
-	#include <windows.h>
-	typedef int socklen_t;
-#else
-	#include <netinet/in.h> // all socket functions
-    typedef int SOCKET;
-#endif
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-#include <cstdlib>
-
-#define BUFF_SIZE 1024
-#define PORT 5050
+#include "net_includes.h"
 
 char buffer[BUFF_SIZE];
 SOCKET my_socket;
 
-int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, int usec = 100) {
+int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, int usec = 10000 * 100) {
     fd_set readfds;
     FD_ZERO(&readfds);
     FD_SET(client_socket, &readfds);
     struct timeval timeout;
     timeout.tv_sec = sec;
     timeout.tv_usec = usec;
-
-    if (select(my_socket, &readfds, NULL, NULL, &timeout) > 0) {
-        return recv(my_socket, buff, len, MSG_CONFIRM);
+    if (select(client_socket + 1, &readfds, NULL, NULL, &timeout) > 0) {
+        return recv(client_socket, buff, len, MSG_CONFIRM);
     }
     return -1;
 }
@@ -74,7 +55,8 @@ int connect_with_client(SOCKET &client_socket) {
 
 int update_net(SOCKET client_socket, const field &F) {
     printf("wait\n");
-    int size = recv(client_socket, buffer, BUFF_SIZE - 1, MSG_CONFIRM);
+    int size = get_data_timeout(client_socket, buffer, BUFF_SIZE - 1);
+    //int size = recv(client_socket, buffer, BUFF_SIZE - 1, MSG_CONFIRM);
     printf("get %d\n", size);
     if (size <= 0) {
         return 0;
@@ -86,18 +68,3 @@ int update_net(SOCKET client_socket, const field &F) {
     }
     return 0;
 }
-/*
-int main()
-{
-    if (init_net()) {
-        printf("failed in init_net\n");
-        return 0;
-    }
-    if (dial_with_client()) {
-        printf("failed in dial_with_client\n");
-        return 0;
-    }
-    shutdown(my_socket, SHUT_RDWR);
-    return 0; 
-}
-*/

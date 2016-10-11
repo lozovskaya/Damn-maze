@@ -3,6 +3,8 @@
 #include <vector>
 #include "field.h"
 #include "net.h"
+
+
 using namespace std;
 
 void write_field(const field &F) {
@@ -23,7 +25,7 @@ int main() {
     }
     SOCKET client_socket;
     if (connect_with_client(client_socket)) {
-        printf("cant connect\n");
+        printf("can't connect\n");
         return 0;
     }
     write_field(F);

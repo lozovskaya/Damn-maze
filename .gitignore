@@ -1,5 +1,6 @@
 server/field.png
-server/main
+server/field
+server/main(_debug)*
 server/dependencies/__pycache__
 
 net_examples/server
