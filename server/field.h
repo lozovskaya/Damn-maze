@@ -28,7 +28,7 @@ struct field {
         height = h;
         width = w;
         data.resize(h, std::vector<cell>(w));
-        for (int i = 0; i < h; i++) {
+        for (int i = 0; i < w; i++) {
             data[0][i] = data.back()[i] = cell(cell_type::wall);
         }
     }
