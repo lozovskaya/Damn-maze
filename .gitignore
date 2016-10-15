@@ -3,5 +3,5 @@ server/field
 server/main
 server/main_debug
 server/dependencies/__pycache__
-
+client/__pycache__
 net_examples/server
