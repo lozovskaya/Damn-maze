@@ -1,7 +1,7 @@
 server/field.png
 server/field
-server/main
-server/main_debug
+server/app
+server/build
 server/dependencies/__pycache__
 client/__pycache__
 net_examples/server
