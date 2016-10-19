@@ -1,9 +1,10 @@
-#include "net_includes.h"
+#include "include/net.h"
+#include "include/net_includes.h"
 
 char buffer[BUFF_SIZE];
 SOCKET my_socket;
 
-int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, int usec = 10000) {
+int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int usec) {
     fd_set readfds;
     FD_ZERO(&readfds);
     FD_SET(client_socket, &readfds);

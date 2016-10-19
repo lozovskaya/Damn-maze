@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "field.h"
-#include "net.h"
+#include "include/field.h"
+#include "include/net.h"
 
 
 using namespace std;

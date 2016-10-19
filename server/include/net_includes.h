@@ -1,4 +1,5 @@
-
+#ifndef NET_INCLUDES_H
+#define NET_INCLUDES_H
 #ifdef _WIN32
 	#pragma comment ( lib, "ws2_32.lib" )
 	#define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -19,3 +20,5 @@
 #define BUFF_SIZE 1024
 #define PORT 5050
 
+
+#endif // NET_INCLUDES_H
