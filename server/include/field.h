@@ -27,6 +27,10 @@ struct field {
     }
     field(int h, int w);    
     void write_out(std::ostream& out) const;
-    int write_bytes(char* buff) const;};
+    int write_bytes(char* buff) const;
+    std::vector<cell> &operator[](int i) {
+        return data[i];
+    }
+};
 
 #endif // FIELD_H

@@ -19,6 +19,9 @@
 
 #define BUFF_SIZE 1024
 #define PORT 5050
+const static int MSG_OK = 0;
+const static int MSG_HELLO = 0;
+const static int MSG_GET_DRAW_DATA = 1;
 
 
 #endif // NET_INCLUDES_H

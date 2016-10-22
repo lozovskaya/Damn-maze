@@ -2,23 +2,15 @@
 #include <fstream>
 #include <vector>
 #include "include/field.h"
+#include "include/point.h"
 #include "include/net.h"
-
+#include "include/world.h"
 
 using namespace std;
 
-void write_field(const field &F) {
-    ofstream output;
-    output.open("field");
-    F.write_out(output);
-    output.close();
-}
 
 int main() {
-    cout << "type height and width of field" << endl;
-    int n, m;
-    cin >> n >> m;
-    field F(n, m);
+    World world;
     if (init_net()) {
         printf("failed in init_net\n");
         return 0;
@@ -28,6 +20,6 @@ int main() {
         printf("can't connect\n");
         return 0;
     }
-    write_field(F);
-    update_net(client_socket, F);
+    world.write_field();
+    update_net(client_socket, world);
 }

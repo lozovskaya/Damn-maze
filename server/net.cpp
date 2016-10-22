@@ -51,17 +51,27 @@ int connect_with_client(SOCKET &client_socket) {
     return 0;
 }
 
-int update_net(SOCKET client_socket, const field &F) {
+int update_net(SOCKET client_socket, World &world) {
     printf("wait\n");
     int size = get_data_timeout(client_socket, buffer, BUFF_SIZE - 1);
     printf("get %d\n", size);
     if (size <= 0) {
         return 0;
     }
-    if (buffer[0] == 1) {
+    int id = -1;
+    switch (buffer[0]) {
+      case MSG_HELLO:
+        printf("new client\n");
+        id = world.add_player();
+        buffer[0] = MSG_OK;
+        memcpy(buffer + 1, &id, sizeof(int));
+        send(client_socket, buffer, 1 + sizeof(int), MSG_CONFIRM);
+        break;
+      case MSG_GET_DRAW_DATA:
         printf("send\n");
-        size = F.write_bytes(buffer);
+        size = world.write_bytes(buffer);
         send(client_socket, buffer, size, MSG_CONFIRM);
+        break;
     }
     return 0;
 }
