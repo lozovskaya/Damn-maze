@@ -18,6 +18,13 @@ int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int 
 }
 
 int init_net() {
+#ifdef _WIN32
+	if (WSAStartup(0x0202, (WSADATA *)&buffer[0]))
+	{
+		printf("WSAStartup error %d\n", WSAGetLastError());
+		return -1;
+	}
+#endif
     struct sockaddr_in serv_addr;
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {

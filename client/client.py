@@ -9,9 +9,9 @@ if (Port == 5060):
     print("couldn't connect")
     exit(0)
 
-print(sock.send(bytearray([1]), socket.MSG_CONFIRM))
+print(sock.send(bytearray([1])))
 #it's a query for server, it understands, that we need field after that message
-data = sock.recv(255, socket.MSG_CONFIRM)
+data = sock.recv(255)
 curr_idx = 0
 height = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
 curr_idx += 4
