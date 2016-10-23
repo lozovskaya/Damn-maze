@@ -1,10 +1,10 @@
 #include "include/net.h"
 #include "include/net_includes.h"
+#include <cstdio>
+#include <stdexcept>
 
-char buffer[BUFF_SIZE];
-SOCKET my_socket;
 
-int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int usec) {
+int Net::get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int usec) {
     fd_set readfds;
     FD_ZERO(&readfds);
     FD_SET(client_socket, &readfds);
@@ -17,35 +17,41 @@ int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int 
     return -1;
 }
 
-int init_net() {
-#ifdef _WIN32
+Net::Net() {
+  #ifdef _WIN32
 	if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
 	{
-		printf("WSAStartup error %d\n", WSAGetLastError());
-		return -1;
+		sprintf(buffer, "WSAStartup error %d\n", WSAGetLastError());
+        throw std::runtime_error(buffer);
 	}
-#endif
-    struct sockaddr_in serv_addr;
+  #endif
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {
-        printf("ERROR opening socket");
-        return -1;
+        sprintf(buffer, "ERROR opening socket");
+        throw std::runtime_error(buffer);
     }
+    sockaddr_in serv_addr;
     memset((char *) &serv_addr, 0, sizeof(serv_addr)); 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(PORT);
     int i = 0;
-    while (bind(my_socket, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+    while (bind(my_socket, (sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         i++;
         serv_addr.sin_port = htons(PORT + i);
     }
     printf("port = %d\n", PORT + i);
     listen(my_socket, 5);
-    return 0;
 }
 
-int connect_with_client(SOCKET &client_socket) {
+Net::~Net() {
+  #ifdef _WIN32
+    WSACleanup();
+  #endif
+  close(my_socket);
+}
+
+int Net::connect_with_client(SOCKET &client_socket) {
     socklen_t client_length;
     struct sockaddr_in client_addr;
     client_length = sizeof(client_addr);
@@ -58,7 +64,7 @@ int connect_with_client(SOCKET &client_socket) {
     return 0;
 }
 
-int update_net(SOCKET client_socket, World &world) {
+int Net::update(SOCKET client_socket, World &world) {
     printf("wait\n");
     int size = get_data_timeout(client_socket, buffer, BUFF_SIZE - 1);
     printf("get %d\n", size);

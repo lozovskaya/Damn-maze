@@ -12,6 +12,7 @@
 	#include <netinet/in.h> // all socket functions
     typedef int SOCKET;
 #endif
+#include <unistd.h>
 #include <cstdio>
 #include <cstring>
 #include <iostream>
