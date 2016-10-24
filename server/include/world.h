@@ -14,10 +14,10 @@ class World {
     field F;
   public:
     World();
-	void write_field() const;
-    size_t write_bytes(char* buffer) const;
-	void move_player(char *buffer);
+    void write_field() const;
+    void move_player(char *buffer);
     int add_player();
+    size_t write_bytes(char* buffer) const;
 };
 
 #endif // WORLD_H

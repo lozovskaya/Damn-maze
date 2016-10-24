@@ -21,14 +21,12 @@ Net::Net() {
   #ifdef _WIN32
 	if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
 	{
-		sprintf_s(buffer, "WSAStartup error %d\n", WSAGetLastError());
-        throw std::runtime_error(buffer);
+        throw std::runtime_error("WSAStartup error");
 	}
   #endif
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {
-        sprintf_s(buffer, "ERROR opening socket");
-        throw std::runtime_error(buffer);
+        throw std::runtime_error("Error opening socket");
     }
     sockaddr_in serv_addr;
     memset((char *) &serv_addr, 0, sizeof(serv_addr)); 
