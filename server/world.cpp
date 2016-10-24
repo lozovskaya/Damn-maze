@@ -1,7 +1,7 @@
+#include "include/rand.h"
 #include "include/world.h"
 #include <fstream>
 #include <memory>
-#include "include/rand.h"
 
 const static int WORLD_FIELD_WIDTH = 20, WORLD_FIELD_HEIGHT = 10;
 
@@ -28,9 +28,8 @@ size_t World::write_bytes(char* buffer) const {
     return result;
 }
 
-void World::move_player(char *buffer) {
-	int player_id = buffer[0];
-	players[player_id]->move(buffer + 1);
+void World::update_player(int player_id, const std::vector<int> & buttons) {
+    players[player_id]->move(buttons);
 }
 
 int World::add_player() {

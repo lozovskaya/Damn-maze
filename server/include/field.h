@@ -1,9 +1,8 @@
-
 #ifndef FIELD_H
 #define FIELD_H
 
-#include <iostream>
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 enum class cell_type {

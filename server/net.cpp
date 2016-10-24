@@ -1,7 +1,9 @@
 #include "include/net.h"
 #include "include/net_includes.h"
+#include "include/util.h"
 #include <cstdio>
 #include <stdexcept>
+#include <vector>
 
 
 int Net::get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int usec) {
@@ -19,10 +21,10 @@ int Net::get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec,
 
 Net::Net() {
   #ifdef _WIN32
-	if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
-	{
+    if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
+    {
         throw std::runtime_error("WSAStartup error");
-	}
+    }
   #endif
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {
@@ -62,6 +64,21 @@ int Net::connect_with_client(SOCKET &client_socket) {
     return 0;
 }
 
+int Net::process_keys_update(World &world) {
+    char *current_ptr = buffer + 1;
+    int player_id = -1, buttons_amount = -1;
+    std::vector<int> buttons_pressed;
+    write_int(&player_id, current_ptr);
+    write_int(&buttons_amount, current_ptr);
+    buttons_pressed.resize(buttons_amount);
+    for (auto &button : buttons_pressed) {
+        write_int(&button, current_ptr);
+    }
+    world.update_player(player_id, buttons_pressed);
+    buffer[0] =  MSG_OK;
+    return 1;
+}
+
 int Net::update(SOCKET client_socket, World &world) {
     printf("wait\n");
     int size = get_data_timeout(client_socket, buffer, BUFF_SIZE - 1);
@@ -70,31 +87,34 @@ int Net::update(SOCKET client_socket, World &world) {
         return 0;
     }
     int id = -1;
+    char *current_ptr = buffer + 1;
     switch (buffer[0]) {
-      case MSG_HELLO:
+      case MSG_HELLO: {
         printf("new client\n");
         id = world.add_player();
         buffer[0] = MSG_OK;
-        memcpy(buffer + 1, &id, sizeof(int));
-        send(client_socket, buffer, 1 + sizeof(int), MSG_CONFIRM);
+        write_int(&id, current_ptr);
+        size = current_ptr - buffer;
         break;
+        }
 
-      case MSG_GET_DRAW_DATA:
+      case MSG_GET_DRAW_DATA: {
         printf("send\n");
         size = world.write_bytes(buffer);
-        send(client_socket, buffer, size, MSG_CONFIRM);
+        break;
+        }
+
+      case MSG_PLAYER_MOVE:
+        printf("Player moving\n");
+        size = process_keys_update(world);
         break;
 
-	  case MSG_PLAYER_MOVE:
-		  printf("Player moving");
-		  world.move_player(buffer + 1);
-		  size = world.write_bytes(buffer);
-		  send(client_socket, buffer, size, MSG_CONFIRM);
-		  break;
-
-	  default:
-		  printf("No matches for message type");
-		  break;
+      default:
+        printf("No matches for message type");
+        buffer[0] = MSG_FAIL;
+        size = 1;
+        break;
     }
+    send(client_socket, buffer, size, MSG_CONFIRM);
     return 0;
 }

@@ -15,7 +15,7 @@ build/main.o: main.cpp include/world.h
 build/world.o: world.cpp include/world.h include/field.h include/point.h include/player.h
 	$(COMPILE)
 
-build/net.o: net.cpp include/net.h include/field.h include/net_includes.h
+build/net.o: net.cpp include/net.h include/field.h include/net_includes.h include/util.h
 	$(COMPILE)
 
 build/field.o: field.cpp include/field.h
