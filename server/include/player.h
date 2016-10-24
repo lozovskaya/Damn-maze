@@ -5,11 +5,12 @@
 #include "cstddef"
 
 class player {
-    point coord;  
+    point coord;
   public:
     player();
     player(int x, int y);
     size_t write_bytes(char* buffer) const;
+	void move(char *buffer);
 };
 
 #endif // PLAYER_H

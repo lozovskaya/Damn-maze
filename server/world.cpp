@@ -28,6 +28,11 @@ size_t World::write_bytes(char* buffer) const {
     return result;
 }
 
+void World::move_player(char *buffer) {
+	int player_id = buffer[0];
+	players[player_id]->move(buffer + 1);
+}
+
 int World::add_player() {
    int player_id = max_player_id++;
    int x = get_rand(0, F.height), y = get_rand(0, F.width);

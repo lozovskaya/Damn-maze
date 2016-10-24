@@ -21,13 +21,13 @@ Net::Net() {
   #ifdef _WIN32
 	if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
 	{
-		sprintf(buffer, "WSAStartup error %d\n", WSAGetLastError());
+		sprintf_s(buffer, "WSAStartup error %d\n", WSAGetLastError());
         throw std::runtime_error(buffer);
 	}
   #endif
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {
-        sprintf(buffer, "ERROR opening socket");
+        sprintf_s(buffer, "ERROR opening socket");
         throw std::runtime_error(buffer);
     }
     sockaddr_in serv_addr;
@@ -48,7 +48,7 @@ Net::~Net() {
   #ifdef _WIN32
     WSACleanup();
   #endif
-  close(my_socket);
+  shutdown(my_socket, SHUT_RDWR);
 }
 
 int Net::connect_with_client(SOCKET &client_socket) {
@@ -80,11 +80,23 @@ int Net::update(SOCKET client_socket, World &world) {
         memcpy(buffer + 1, &id, sizeof(int));
         send(client_socket, buffer, 1 + sizeof(int), MSG_CONFIRM);
         break;
+
       case MSG_GET_DRAW_DATA:
         printf("send\n");
         size = world.write_bytes(buffer);
         send(client_socket, buffer, size, MSG_CONFIRM);
         break;
+
+	  case MSG_PLAYER_MOVE:
+		  printf("Player moving");
+		  world.move_player(buffer + 1);
+		  size = world.write_bytes(buffer);
+		  send(client_socket, buffer, size, MSG_CONFIRM);
+		  break;
+
+	  default:
+		  printf("No matches for message type");
+		  break;
     }
     return 0;
 }

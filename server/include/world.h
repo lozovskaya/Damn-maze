@@ -14,8 +14,9 @@ class World {
     field F;
   public:
     World();
-    void write_field() const;
+	void write_field() const;
     size_t write_bytes(char* buffer) const;
+	void move_player(char *buffer);
     int add_player();
 };
 

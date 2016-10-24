@@ -18,5 +18,8 @@ int main() {
         return 0;
     }
     world.write_field();
-    net.update(client_socket, world);
+	while (true)
+	{
+		net.update(client_socket, world);
+	}
 }
