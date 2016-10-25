@@ -4,9 +4,18 @@
 #include <cstdio>
 #include <stdexcept>
 #include <vector>
+#include <thread>
 
 
-int Net::get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec, int usec) {
+void accept_new_clients(Net& net) {
+    SOCKET client_sock;
+    while (true) {
+        net.connect_with_client(client_sock);
+        net.clients[client_sock].socket = client_sock;
+    }
+}
+
+int Net::get_data_timeout(SOCKET client_socket, size_t len, int sec, int usec) {
     fd_set readfds;
     FD_ZERO(&readfds);
     FD_SET(client_socket, &readfds);
@@ -14,7 +23,7 @@ int Net::get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec,
     timeout.tv_sec = sec;
     timeout.tv_usec = usec;
     if (select(client_socket + 1, &readfds, NULL, NULL, &timeout) > 0) {
-        return recv(client_socket, buff, len, MSG_CONFIRM);
+        return recv(client_socket, buffer, len, MSG_CONFIRM);
     }
     return -1;
 }
@@ -42,6 +51,10 @@ Net::Net() {
     }
     printf("port = %d\n", PORT + i);
     listen(my_socket, 5);
+    std::thread
+    accepting_thread(accept_new_clients,
+    std::ref(*this));
+    accepting_thread.detach();
 }
 
 Net::~Net() {
@@ -64,49 +77,45 @@ int Net::connect_with_client(SOCKET &client_socket) {
     return 0;
 }
 
-int Net::process_keys_update(World &world) {
+
+int Net::new_client(World &world) {
     char *current_ptr = buffer + 1;
-    int player_id = -1, buttons_amount = -1;
+    int id = world.add_player();
+    buffer[0] = MSG_OK;
+    write_value(&id, current_ptr);
+    return current_ptr - buffer;
+}
+
+int Net::update_processing_keys(World &world) {
+    char *current_ptr = buffer + 1;
+    int player_id = -1;
     std::vector<int> buttons_pressed;
-    write_int(&player_id, current_ptr);
-    write_int(&buttons_amount, current_ptr);
-    buttons_pressed.resize(buttons_amount);
-    for (auto &button : buttons_pressed) {
-        write_int(&button, current_ptr);
-    }
+    write_value(&player_id, current_ptr);
+    write_vector(buttons_pressed, current_ptr);
     world.update_player(player_id, buttons_pressed);
-    buffer[0] =  MSG_OK;
+    buffer[0] = MSG_OK;
     return 1;
 }
 
-int Net::update(SOCKET client_socket, World &world) {
-    printf("wait\n");
-    int size = get_data_timeout(client_socket, buffer, BUFF_SIZE - 1);
-    printf("get %d\n", size);
+void Net::update_one_client(SOCKET client_socket, World &world) {
+    int size = get_data_timeout(client_socket, BUFF_SIZE - 1);
     if (size <= 0) {
-        return 0;
+        return;
     }
-    int id = -1;
-    char *current_ptr = buffer + 1;
     switch (buffer[0]) {
-      case MSG_HELLO: {
+      case MSG_HELLO:
         printf("new client\n");
-        id = world.add_player();
-        buffer[0] = MSG_OK;
-        write_int(&id, current_ptr);
-        size = current_ptr - buffer;
+        size = new_client(world);
         break;
-        }
 
-      case MSG_GET_DRAW_DATA: {
+      case MSG_GET_DRAW_DATA:
         printf("send\n");
         size = world.write_bytes(buffer);
         break;
-        }
 
       case MSG_PLAYER_MOVE:
         printf("Player moving\n");
-        size = process_keys_update(world);
+        size = update_processing_keys(world);
         break;
 
       default:
@@ -116,5 +125,12 @@ int Net::update(SOCKET client_socket, World &world) {
         break;
     }
     send(client_socket, buffer, size, MSG_CONFIRM);
+}
+
+int Net::update(World &world) {
+    for (auto client : clients) {
+        SOCKET client_socket = client.first;
+        update_one_client(client_socket, world);
+    }
     return 0;
 }
