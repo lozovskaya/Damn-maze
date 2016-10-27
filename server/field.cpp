@@ -1,6 +1,6 @@
 #include "include/field.h"
-#include <iostream>
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 field::field(int h, int w) {

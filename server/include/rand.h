@@ -2,6 +2,7 @@
 #define RAND_H
 
 #include <cstdlib>
+#include <utility>
 int get_rand(int a, int b) {
     if (b < a) {
         std::swap(a, b);

@@ -1,5 +1,6 @@
 CXX = g++ -Wall -Wextra -Wshadow -std=c++11 -c
-LD = g++ -lm
+LD = g++
+DLLS = -lm -lpthread
 BUILD_DIRECTORY=build
 
 all: app
@@ -7,7 +8,7 @@ all: app
 COMPILE= $(CXX) $< -o $@
 
 app: $(BUILD_DIRECTORY) build/main.o build/world.o build/net.o build/field.o build/player.o build/point.o
-	$(LD) build/* -o app
+	$(LD) build/* $(DLLS) -o app
 
 build/main.o: main.cpp include/world.h
 	$(COMPILE)
@@ -15,7 +16,7 @@ build/main.o: main.cpp include/world.h
 build/world.o: world.cpp include/world.h include/field.h include/point.h include/player.h
 	$(COMPILE)
 
-build/net.o: net.cpp include/net.h include/field.h include/net_includes.h
+build/net.o: net.cpp include/net.h include/field.h include/net_includes.h include/util.h
 	$(COMPILE)
 
 build/field.o: field.cpp include/field.h
