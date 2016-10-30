@@ -1,4 +1,5 @@
 #include "include/field.h"
+#include "include/rand.h"
 #include <cstring>
 #include <iostream>
 #include <vector>
@@ -10,6 +11,9 @@ field::field(int h, int w) {
     for (int i = 0; i < w; i++) {
         data[0][i] = data.back()[i] = cell(cell_type::wall);
     }
+    int hole_x = get_rand(1, h - 2);
+    int hole_y = get_rand(1, w - 2);
+    data[hole_x][hole_y] = cell(cell_type::hole);
 }
 
 void field::write_out(std::ostream& out) const {
