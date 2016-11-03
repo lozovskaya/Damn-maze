@@ -6,8 +6,8 @@
 #include <vector>
 
 class player {
-    point coord;
-    point speed;
+    point coord; 
+    point speed; 
   public:
     player();
     player(int x, int y);
@@ -15,7 +15,7 @@ class player {
     void change_state(const std::vector<int> &buffer);
     point get_coord() const;
     point get_speed() const;
-    void move(int t);
+    void move(double t);
 };
 
 #endif // PLAYER_H

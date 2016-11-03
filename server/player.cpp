@@ -37,7 +37,7 @@ point player::get_speed() const {
     return speed;
 }
 
-void player::move(int t) {
+void player::move(double t) {
     coord += speed * t;
 }
 

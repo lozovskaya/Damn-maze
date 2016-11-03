@@ -5,6 +5,9 @@
 #include <iostream>
 #include <vector>
 
+#define FIELD_X 10
+#define FIELD_Y 10
+
 enum class cell_type {
     ground = 0,
     wall = 1,

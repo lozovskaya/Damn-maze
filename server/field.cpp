@@ -39,3 +39,4 @@ int field::write_bytes(char* buff) const {
     
     return buff - last;
 }
+

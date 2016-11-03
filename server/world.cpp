@@ -6,25 +6,58 @@
 const static int WORLD_FIELD_WIDTH = 20, WORLD_FIELD_HEIGHT = 10;
 
 World::World():
-    max_player_id(0),
-    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH)
+    max_player_id(0), 
+    time(0), 
+    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH) 
     {}
 
 void World::update() {
     for (auto player : players) {
         move_player(player.second);
     }
-    time = 60;
+    time = ((double) clock()) / CLOCKS_PER_SEC; 
 }
 
-int World::check_move(point coord, point speed) {
-    return std::min(time, 1);
+bool collision(point s1, point f1, point s2, point f2) { 
+    return true;
+}
+
+double World::bin_time(point coord, point speed, double t1, double t2) { 
+    if (t2 - t1 < 0.01) { 
+        return t1;
+    }
+    point fin = coord + speed * (t2 - t1);
+    point start, end; 
+    bool intersep = false;
+    for (int i = 0; i < F.height; i++) { 
+        for (int j = 0; j < F.width; j++) { 
+            if (true /*F.data[i][j].type == cell_type::wall*/) { //FIXME
+                start = point(i * FIELD_X, j * FIELD_Y); 
+                end = point((i + 1) * FIELD_X, j * FIELD_Y); 
+                intersep = intersep || collision(coord, fin, start, end); 
+                end = point(i * FIELD_X, (j + 1) * FIELD_Y); 
+                intersep = intersep || collision(coord, fin, start, end); 
+                start  = point((i + 1) * FIELD_X, (j + 1) * FIELD_Y); 
+                intersep = intersep || collision(coord, fin, start, end); 
+                end = point((i + 1) * FIELD_X, j * FIELD_Y); 
+                intersep = intersep || collision(coord, fin, start, end); 
+                if (intersep) { 
+                    return bin_time(coord, speed, t1, t2 - t1);
+                }
+            }
+        }
+    }
+    return bin_time(coord, speed, t2 - t1, t2);
+}
+
+double World::time_of_movement(point coord, point speed) { //TODO 
+    return bin_time(coord, speed, 0, ((double) clock()) / CLOCKS_PER_SEC - time);
 }
 
 void World::move_player(std::shared_ptr <player> player) {
     point coord = player->get_coord();
     point speed = player->get_speed();
-    player->move(check_move(coord, speed));
+    player->move(time_of_movement(coord, speed));
 }
 
 void World::write_field() const {
