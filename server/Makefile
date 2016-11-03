@@ -8,8 +8,9 @@ all: app
 COMPILE= $(CXX) $< -o $@
 
 app: $(BUILD_DIRECTORY) build/main.o build/world.o build/net.o build/field.o build/player.o build/point.o \
-						build/rand.o
+						build/rand.o build/line.o
 	$(LD) build/* $(DLLS) -o app
+
 
 build/main.o: main.cpp include/world.h
 	$(COMPILE)
@@ -26,10 +27,13 @@ build/field.o: field.cpp include/field.h include/rand.h
 build/player.o: player.cpp include/point.h include/player.h
 	$(COMPILE)
 
+build/line.o: line.cpp include/point.h
+	$(COMPILE)
+
 build/point.o: point.cpp include/point.h
 	$(COMPILE)
 
-build/rand.o: rand.cpp
+build/rand.o: rand.cpp include/rand.h
 	$(COMPILE)
 
 build:

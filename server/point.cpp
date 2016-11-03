@@ -9,6 +9,14 @@ double point::sqlength() const {
     return x * x + y * y;
 }
 
+point point::operator + () const {
+    return point(-y, x);
+}
+
+point point::operator - () const {
+    return point(-x, -y);
+}
+
 point point::operator + (const point &other) const {
     return point(x + other.x, y + other.y);
 }

@@ -22,6 +22,9 @@ struct point {
 
     double sqlength() const;
 
+    point operator - () const;
+    point operator + () const;
+
     point operator + (const point &other) const;
     point operator - (const point &other) const;
     point operator * (const double &other) const;
