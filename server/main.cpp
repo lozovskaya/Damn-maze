@@ -16,5 +16,6 @@ int main() {
     while (true)
     {
         net.update(world);
+        world.update();
     }
 }

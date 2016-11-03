@@ -92,7 +92,7 @@ int Net::update_processing_keys(World &world) {
     std::vector<int> buttons_pressed;
     write_value(&player_id, current_ptr);
     write_vector(buttons_pressed, current_ptr);
-    world.update_player(player_id, buttons_pressed);
+    world.change_player_state(player_id, buttons_pressed);
     buffer[0] = MSG_OK;
     return 1;
 }

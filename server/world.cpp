@@ -10,12 +10,29 @@ World::World():
     F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH)
     {}
 
+void World::update() {
+    for (auto player : players) {
+        move_player(player.second);
+    }
+    time = 60;
+}
+
+int World::check_move(point coord, point speed) {
+    return std::min(time, 1);
+}
+
+void World::move_player(std::shared_ptr <player> player) {
+    point coord = player->get_coord();
+    point speed = player->get_speed();
+    player->move(check_move(coord, speed));
+}
+
 void World::write_field() const {
     std::ofstream output;
     output.open("field");
     F.write_out(output);
     output.close();
-};
+}
 
 size_t World::write_bytes(char* buffer) const {
     size_t result = F.write_bytes(buffer);
@@ -28,8 +45,8 @@ size_t World::write_bytes(char* buffer) const {
     return result;
 }
 
-void World::update_player(int player_id, const std::vector<int> & buttons) {
-    players[player_id]->move(buttons);
+void World::change_player_state(int player_id, const std::vector<int> & buttons) {
+    players[player_id]->change_state(buttons);
 }
 
 int World::add_player() {
