@@ -22,36 +22,48 @@ bool collision(point s1, point f1, point s2, point f2) {
     return true;
 }
 
-double World::bin_time(point coord, point speed, double t1, double t2) { 
-    if (t2 - t1 < 0.01) { 
-        return t1;
-    }
-    point fin = coord + speed * (t2 - t1);
-    point start, end; 
-    bool intersep = false;
-    for (int i = 0; i < F.height; i++) { 
-        for (int j = 0; j < F.width; j++) { 
-            if (true /*F.data[i][j].type == cell_type::wall*/) { //FIXME
-                start = point(i * FIELD_X, j * FIELD_Y); 
-                end = point((i + 1) * FIELD_X, j * FIELD_Y); 
-                intersep = intersep || collision(coord, fin, start, end); 
-                end = point(i * FIELD_X, (j + 1) * FIELD_Y); 
-                intersep = intersep || collision(coord, fin, start, end); 
-                start  = point((i + 1) * FIELD_X, (j + 1) * FIELD_Y); 
-                intersep = intersep || collision(coord, fin, start, end); 
-                end = point((i + 1) * FIELD_X, j * FIELD_Y); 
-                intersep = intersep || collision(coord, fin, start, end); 
-                if (intersep) { 
-                    return bin_time(coord, speed, t1, t2 - t1);
-                }
-            }
-        }
-    }
-    return bin_time(coord, speed, t2 - t1, t2);
+bool square_intersect(point coord, point fin, int i, int j) {
+    bool intersect = false;
+    point start = point(i * FIELD_X, j * FIELD_Y); 
+    point end = point((i + 1) * FIELD_X, j * FIELD_Y); 
+    intersect |= collision(coord, fin, start, end); 
+    end = point(i * FIELD_X, (j + 1) * FIELD_Y); 
+    intersect |= collision(coord, fin, start, end); 
+    start  = point((i + 1) * FIELD_X, (j + 1) * FIELD_Y); 
+    intersect |= collision(coord, fin, start, end); 
+    end = point((i + 1) * FIELD_X, j * FIELD_Y); 
+    intersect |= collision(coord, fin, start, end); 
+    return intersect;
 }
 
-double World::time_of_movement(point coord, point speed) { //TODO 
-    return bin_time(coord, speed, 0, ((double) clock()) / CLOCKS_PER_SEC - time);
+
+
+double World::bin_by_time(point coord, point speed, double min_time, double max_time) { 
+    while ((max_time + min_time) / 2 > 0.01)
+    {
+        bool flag = false;
+        point fin = coord + speed * (max_time + min_time) / 2;
+        for (int i = 0; i < F.height; i++) { 
+            for (int j = 0; j < F.width; j++) { 
+                if (F.data[i][j].type == cell_type::wall) { //Just when it is wall FIXME
+                    flag = square_intersect(coord, fin, i, j);
+                    }
+                if (flag) break;
+            }
+            if(flag) break;
+        }
+        if (flag) {
+            max_time = (max_time + min_time) / 2;
+        }
+        else {
+            min_time = (max_time + min_time) / 2;
+        }
+    }
+    return (max_time + min_time) / 2;
+}
+
+double World::time_of_movement(point coord, point speed) {
+    return bin_by_time(coord, speed, 0, ((double) clock()) / CLOCKS_PER_SEC - time);
 }
 
 void World::move_player(std::shared_ptr <player> player) {

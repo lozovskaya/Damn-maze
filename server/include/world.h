@@ -21,7 +21,7 @@ class World {
     
     double time_of_movement(point coord, point speed);
     void move_player(std::shared_ptr <player> player);
-    double bin_time(point coord, point speed, double t1, double t2); 
+    double bin_by_time(point coord, point speed, double min_time, double max_time); 
 
   public:
     World();
