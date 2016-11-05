@@ -5,8 +5,8 @@
 #include <iostream>
 #include <vector>
 
-#define FIELD_X 10
-#define FIELD_Y 10
+const static int FIELD_X = 10;
+const static int FIELD_Y = 10;
 
 enum class cell_type {
     ground = 0,

@@ -18,52 +18,51 @@ void World::update() {
     time = ((double) clock()) / CLOCKS_PER_SEC; 
 }
 
-bool collision(point s1, point f1, point s2, point f2) { 
-    return true;
+bool polygon_intersect(point fst, point sec, std::vector <segment> &a) {
+    segment move_line(fst, sec);
+    for (auto el : a) {
+        if (move_line & el) return true;
+    }
+    return false;
 }
 
-bool square_intersect(point coord, point fin, int i, int j) {
-    bool intersect = false;
-    point start = point(i * FIELD_X, j * FIELD_Y); 
-    point end = point((i + 1) * FIELD_X, j * FIELD_Y); 
-    intersect |= collision(coord, fin, start, end); 
-    end = point(i * FIELD_X, (j + 1) * FIELD_Y); 
-    intersect |= collision(coord, fin, start, end); 
-    start  = point((i + 1) * FIELD_X, (j + 1) * FIELD_Y); 
-    intersect |= collision(coord, fin, start, end); 
-    end = point((i + 1) * FIELD_X, j * FIELD_Y); 
-    intersect |= collision(coord, fin, start, end); 
-    return intersect;
+std::vector <segment> & make_square(int i, int j) {
+    std::vector <segment> a;
+    a.push_back(segment(point(i * FIELD_X, j * FIELD_Y), point((i + 1) * FIELD_X, j * FIELD_Y)));
+    a.push_back(segment(point(i * FIELD_X, j * FIELD_Y), point(i * FIELD_X, (j + 1) * FIELD_Y)));
+    a.push_back(segment(point((i + 1) * FIELD_X, (j + 1) * FIELD_Y), point((i + 1) * FIELD_X, j * FIELD_Y)));
+    a.push_back(segment(point((i + 1) * FIELD_X, (j + 1) * FIELD_Y), point(i * FIELD_X, (j + 1) * FIELD_Y)));
+    return a;
 }
 
-
-
-double World::bin_by_time(point coord, point speed, double min_time, double max_time) { 
-    while ((max_time + min_time) / 2 > 0.01)
+double World::search_by_time(point coord, point speed, double max_time) {
+    double check_time, min_time = 0;
+    for (int i = 0; i < 20; i++)
     {
-        bool flag = false;
-        point fin = coord + speed * (max_time + min_time) / 2;
+        check_time = (max_time + min_time) / 2;
+        bool obstructed = false;
+        point fst = coord, sec = coord + speed * check_time; 
         for (int i = 0; i < F.height; i++) { 
             for (int j = 0; j < F.width; j++) { 
                 if (F.data[i][j].type == cell_type::wall) { //Just when it is wall FIXME
-                    flag = square_intersect(coord, fin, i, j);
+                    obstructed = polygon_intersect(fst, sec, make_square(i, j));
                     }
-                if (flag) break;
+                if (obstructed) break;
             }
-            if(flag) break;
+            if (obstructed) break;
         }
-        if (flag) {
-            max_time = (max_time + min_time) / 2;
+        if (obstructed) {
+            max_time = check_time;
         }
         else {
-            min_time = (max_time + min_time) / 2;
+            min_time = check_time;
         }
     }
-    return (max_time + min_time) / 2;
+    return check_time;
 }
 
 double World::time_of_movement(point coord, point speed) {
-    return bin_by_time(coord, speed, 0, ((double) clock()) / CLOCKS_PER_SEC - time);
+    return search_by_time(coord, speed, ((double) clock()) / CLOCKS_PER_SEC - time);
 }
 
 void World::move_player(std::shared_ptr <player> player) {

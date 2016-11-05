@@ -4,6 +4,7 @@
 #include "field.h"
 #include "player.h"
 #include "point.h"
+#include "line.h"
 #include <map>
 #include <memory>
 #include <vector>
@@ -21,7 +22,7 @@ class World {
     
     double time_of_movement(point coord, point speed);
     void move_player(std::shared_ptr <player> player);
-    double bin_by_time(point coord, point speed, double min_time, double max_time); 
+    double search_by_time(point coord, point speed, double max_time); 
 
   public:
     World();
