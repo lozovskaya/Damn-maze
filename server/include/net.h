@@ -16,7 +16,7 @@ struct client {
 
 class Net {
     SOCKET my_socket;
-    char buffer[BUFF_SIZE];
+    char* buffer;
     std::map<SOCKET, client> clients;
 
     void update_one_client(SOCKET client_socket, World &world);
@@ -24,6 +24,8 @@ class Net {
     int update_processing_keys(World &world);
     int connect_with_client(SOCKET &client_socket);
     int new_client(World &world);
+    int get_data_timeout(SOCKET client_socket, char* buff, size_t len, int sec = 0, int usec = 10000);
+    int process_keys_update(World &world);
   public:
     Net();
     ~Net();

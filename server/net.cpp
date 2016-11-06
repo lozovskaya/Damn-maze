@@ -35,6 +35,7 @@ Net::Net() {
         throw std::runtime_error("WSAStartup error");
     }
   #endif
+    buffer = new char[BUFF_SIZE];
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {
         throw std::runtime_error("Error opening socket");
@@ -61,6 +62,7 @@ Net::~Net() {
   #ifdef _WIN32
     WSACleanup();
   #endif
+  delete[] buffer;
   shutdown(my_socket, SHUT_RDWR);
 }
 
