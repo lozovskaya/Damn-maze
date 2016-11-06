@@ -29,13 +29,13 @@ int Net::get_data_timeout(SOCKET client_socket, size_t len, int sec, int usec) {
 }
 
 Net::Net() {
+    buffer = new char[BUFF_SIZE];
   #ifdef _WIN32
     if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
     {
         throw std::runtime_error("WSAStartup error");
     }
   #endif
-    buffer = new char[BUFF_SIZE];
     my_socket = socket(AF_INET, SOCK_STREAM, 0); // you create your socket object
     if (my_socket < 0) {
         throw std::runtime_error("Error opening socket");
