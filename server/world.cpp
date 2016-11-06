@@ -26,7 +26,7 @@ bool polygon_intersect_segment(segment segm, const std::vector <point> & polygon
     return false;
 }
 
-std::vector <point> make_square(int i, int j) {
+std::vector <point> square_by_cell(int i, int j) {
     std::vector <point> square;
     square.push_back(point(i * FIELD_X, j * FIELD_Y));
     square.push_back(point(i * FIELD_X, (j + 1) * FIELD_Y));
@@ -44,7 +44,7 @@ double World::search_by_time(point coord, point speed, double max_time) {
         for (int i = 0; i < F.height && !obstructed; i++) { 
             for (int j = 0; j < F.width && !obstructed; j++) { 
                 if (F.data[i][j].type == cell_type::wall) { //Just when it is wall FIXME
-                    obstructed = polygon_intersect_segment(segment(begin, end), make_square(i, j));
+                    obstructed = polygon_intersect_segment(segment(begin, end), square_by_cell(i, j));
                 } 
             }
         }
