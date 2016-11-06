@@ -12,13 +12,13 @@ segment::segment(const point &a, const point &b):
     end(b)
 {}
 
-vect segment::vec() const {
+vector segment::vec() const {
     return end - begin;
 }
 
 bool segment::operator & (const segment &other) const {
-    return (vect(other.begin, begin) & other.vec()) * (vect(other.begin, end)  & other.vec()) <= 0
-        && (vect(begin, other.begin) & vec()) * (vect(begin, other.end)  & vec()) <= 0;
+    return (vector(other.begin, begin) & other.vec()) * (vector(other.begin, end)  & other.vec()) <= 0
+        && (vector(begin, other.begin) & vec()) * (vector(begin, other.end)  & vec()) <= 0;
 }
 
 double segment::len() const {

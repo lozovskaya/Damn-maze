@@ -9,7 +9,7 @@ class segment {
   public:
     segment();
     segment(const point &a, const point &b);
-    vect vec() const;
+    vector vec() const;
     double len() const;
     bool operator & (const segment &other) const;
 };
