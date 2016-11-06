@@ -19,8 +19,8 @@ void World::update() {
 }
 
 bool polygon_intersect_segm(segment segm, const std::vector <point> & polygon) {
-    for (int i = 0; i < polygon.size() - 1; i++) {
-        if (segm & segment(polygon[i], polygon[i % polygon.size()])) 
+    for (int i = 0; i < polygon.size(); i++) {
+        if (segm & segment(polygon[i], polygon[(i + 1) % polygon.size()])) 
             return true;
     }
     return false;
@@ -41,8 +41,8 @@ double World::search_by_time(point coord, point speed, double max_time) {
         check_time = (max_time + min_time) / 2;
         bool obstructed = false;
         point begin = coord, end = coord + speed * check_time; 
-        for (int i = 0; i < F.height && obstructed; i++) { 
-            for (int j = 0; j < F.width && obstructed; j++) { 
+        for (int i = 0; i < F.height && !obstructed; i++) { 
+            for (int j = 0; j < F.width && !obstructed; j++) { 
                 if (F.data[i][j].type == cell_type::wall) { //Just when it is wall FIXME
                     obstructed = polygon_intersect_segm(segment(begin, end), make_square(i, j));
                 } 
