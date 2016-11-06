@@ -5,12 +5,12 @@
 
 class segment {
     point begin, end;
-    double len;
 
   public:
     segment();
     segment(const point &a, const point &b);
-    point vec() const;
+    vect vec() const;
+    double len() const;
     bool operator & (const segment &other) const;
 };
 

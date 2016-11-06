@@ -48,4 +48,6 @@ point rotate(const point &a, const point& center, double angle);
 
 double distance(const point &a, const point &b);
 
+typedef point vect;
+
 #endif // POINT_H

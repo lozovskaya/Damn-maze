@@ -18,38 +18,35 @@ void World::update() {
     time = ((double) clock()) / CLOCKS_PER_SEC; 
 }
 
-bool polygon_intersect(point fst, point sec, std::vector <segment> &a) {
-    segment move_line(fst, sec);
-    for (auto el : a) {
-        if (move_line & el) return true;
+bool polygon_intersect_segm(segment segm, const std::vector <point> & polygon) {
+    for (int i = 0; i < polygon.size() - 1; i++) {
+        if (segm & segment(polygon[i], polygon[i % polygon.size()])) 
+            return true;
     }
     return false;
 }
 
-std::vector <segment> & make_square(int i, int j) {
-    std::vector <segment> a;
-    a.push_back(segment(point(i * FIELD_X, j * FIELD_Y), point((i + 1) * FIELD_X, j * FIELD_Y)));
-    a.push_back(segment(point(i * FIELD_X, j * FIELD_Y), point(i * FIELD_X, (j + 1) * FIELD_Y)));
-    a.push_back(segment(point((i + 1) * FIELD_X, (j + 1) * FIELD_Y), point((i + 1) * FIELD_X, j * FIELD_Y)));
-    a.push_back(segment(point((i + 1) * FIELD_X, (j + 1) * FIELD_Y), point(i * FIELD_X, (j + 1) * FIELD_Y)));
-    return a;
+std::vector <point> make_square(int i, int j) {
+    std::vector <point> square;
+    square.push_back(point(i * FIELD_X, j * FIELD_Y));
+    square.push_back(point(i * FIELD_X, (j + 1) * FIELD_Y));
+    square.push_back(point((i + 1) * FIELD_X, (j + 1) * FIELD_Y));
+    square.push_back(point((i + 1) * FIELD_X, j * FIELD_Y));
+    return square;
 }
 
 double World::search_by_time(point coord, point speed, double max_time) {
     double check_time, min_time = 0;
-    for (int i = 0; i < 20; i++)
-    {
+    for (int k = 0; k < 20; k++) {
         check_time = (max_time + min_time) / 2;
         bool obstructed = false;
-        point fst = coord, sec = coord + speed * check_time; 
-        for (int i = 0; i < F.height; i++) { 
-            for (int j = 0; j < F.width; j++) { 
+        point begin = coord, end = coord + speed * check_time; 
+        for (int i = 0; i < F.height && obstructed; i++) { 
+            for (int j = 0; j < F.width && obstructed; j++) { 
                 if (F.data[i][j].type == cell_type::wall) { //Just when it is wall FIXME
-                    obstructed = polygon_intersect(fst, sec, make_square(i, j));
-                    }
-                if (obstructed) break;
+                    obstructed = polygon_intersect_segm(segment(begin, end), make_square(i, j));
+                } 
             }
-            if (obstructed) break;
         }
         if (obstructed) {
             max_time = check_time;
