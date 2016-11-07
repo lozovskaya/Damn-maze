@@ -7,7 +7,7 @@ def get_color(x):
     elif  x == 1:
         return (64, 32, 0, 255)
     else:
-        return (255, 0, 0, 255)
+        return (200, 0, 50, 255)
 
 def get_pixel(i, j):
     if (i % width == 0 or j % width == 0):
