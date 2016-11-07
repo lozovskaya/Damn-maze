@@ -3,12 +3,11 @@
 #include <fstream>
 #include <memory>
 
-const static int WORLD_FIELD_WIDTH = 20, WORLD_FIELD_HEIGHT = 10;
 
 World::World():
     max_player_id(0), 
     time(0), 
-    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH) 
+    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH, USED_FIELD_TYPE) 
     {}
 
 void World::update() {
@@ -28,10 +27,10 @@ bool polygon_intersect_segment(segment segm, const std::vector <point> & polygon
 
 std::vector <point> make_square(int i, int j) {
     std::vector <point> square;
-    square.push_back(point(i * FIELD_X, j * FIELD_Y));
-    square.push_back(point(i * FIELD_X, (j + 1) * FIELD_Y));
-    square.push_back(point((i + 1) * FIELD_X, (j + 1) * FIELD_Y));
-    square.push_back(point((i + 1) * FIELD_X, j * FIELD_Y));
+    square.push_back(point(i * CELL_X, j * CELL_Y));
+    square.push_back(point(i * CELL_X, (j + 1) * CELL_Y));
+    square.push_back(point((i + 1) * CELL_X, (j + 1) * CELL_Y));
+    square.push_back(point((i + 1) * CELL_X, j * CELL_Y));
     return square;
 }
 

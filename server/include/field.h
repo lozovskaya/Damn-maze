@@ -4,9 +4,18 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <set>
 
-const static int FIELD_X = 10;
-const static int FIELD_Y = 10;
+const static int WORLD_FIELD_WIDTH = 50;
+const static int WORLD_FIELD_HEIGHT = 50;
+const static int CELL_X = 10;
+const static int CELL_Y = 10;
+const static int USED_FIELD_TYPE = 3; //will be used now
+const static int FIELD_TYPE_1 = 1; //BLANCK
+const static int FIELD_TYPE_2 = 2; //RANDOM
+const static int FIELD_TYPE_3 = 3; //
+const static int num_of_rooms = 5;
+const static int num_of_holes = 20;
 
 enum class cell_type {
     ground = 0,
@@ -27,7 +36,7 @@ struct field {
 
     field() : height(0), width(0){
     }
-    field(int h, int w);    
+    field(int h, int w, int type);    
     void write_out(std::ostream& out) const;
     int write_bytes(char* buff) const;
     std::vector<cell> &operator[](int i) {
