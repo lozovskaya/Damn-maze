@@ -14,7 +14,7 @@ const static int CELL_HEIGHT = 10;
 enum class field_type {
     blank = 1,
     random = 2,
-    roommed = 3,
+    roomfilled = 3,
 };
 
 enum class cell_type {
@@ -25,7 +25,7 @@ enum class cell_type {
 
 struct cell {
     cell_type type;
-    cell(cell_type t = cell_type::ground) : type(t) {
+    cell(cell_type t=cell_type::ground) : type(t) {
     }
 };
 
@@ -36,7 +36,10 @@ struct field {
 
     field() : height(0), width(0){
     }
-    field(int h, int w, field_type type=field_type::roommed);
+    field(int h, int w, field_type type=field_type::roomfilled);
+    void generate_blank_field();
+    void generate_random_field();
+    void generate_roomfilled_field();
     void make_rooms(std::set<std::pair<int, int> > & corners);
     void room_walls(int x1, int y1, int x2, int y2);
     void write_out(std::ostream& out) const;
