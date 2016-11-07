@@ -4,7 +4,7 @@ import dependencies.png as png
 def get_color(x):
     if x == 0:
         return (200, 200, 200, 255)
-    elif  x == 1:
+    elif x == 1:
         return (64, 32, 0, 255)
     else:
         return (200, 0, 50, 255)

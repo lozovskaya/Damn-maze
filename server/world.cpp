@@ -7,7 +7,7 @@
 World::World():
     max_player_id(0), 
     time(0), 
-    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH, USED_FIELD_TYPE) 
+    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH) 
     {}
 
 void World::update() {
@@ -27,10 +27,10 @@ bool polygon_intersect_segment(segment segm, const std::vector <point> & polygon
 
 std::vector <point> make_square(int i, int j) {
     std::vector <point> square;
-    square.push_back(point(i * CELL_X, j * CELL_Y));
-    square.push_back(point(i * CELL_X, (j + 1) * CELL_Y));
-    square.push_back(point((i + 1) * CELL_X, (j + 1) * CELL_Y));
-    square.push_back(point((i + 1) * CELL_X, j * CELL_Y));
+    square.push_back(point(i * CELL_WIDTH, j * CELL_HEIGHT));
+    square.push_back(point(i * CELL_WIDTH, (j + 1) * CELL_HEIGHT));
+    square.push_back(point((i + 1) * CELL_WIDTH, (j + 1) * CELL_HEIGHT));
+    square.push_back(point((i + 1) * CELL_WIDTH, j * CELL_HEIGHT));
     return square;
 }
 
