@@ -22,13 +22,10 @@ def to_hex(i):
 
 
 def create_hole(canvas, x, y):
+    hole = []
     for i in range(5, -1, -1):
-        hole = canvas.create_rectangle(x + i * 2, y + i * 2, 
-                                       x - 50 - i * 2, y - 50 - i * 2, outline="black",
-                                       fill="#" + to_hex(i * 40) * 6)
-
-root = tk.Tk()
-canvas = tk.Canvas(root)
-canvas.pack()
-create_hole(canvas, 100, 100)
-root.mainloop()
+        hole += [canvas.create_rectangle(x + i * 2, y + i * 2, 
+                                         x - 50 - i * 2, y - 50 - i * 2, 
+                                         outline="black", 
+                                         fill="#" + to_hex(i * 40) * 6)]
+    return hole

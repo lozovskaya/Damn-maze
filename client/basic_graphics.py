@@ -15,10 +15,6 @@ def create_player(x1, y1, x2, y2):
     return player
 
 
-# def create_one_square(x1, y1, x2, y2, colour="white"):
-#1    square = canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=colour)
-
-
 def create_button(text_on_button, x1, y1, command1):
     button = tk.Button(root, width=3, height=3, bg="white", fg="black",
     text=text_on_button, font="arial 15", command=command1)
@@ -37,23 +33,18 @@ def add_new_square(i, j, colour="white"):
                                    outline="black", fill=colour)
     return new_square
 
-def f():
-    for i in range(len(field)):                                                      
-        for j in range(len(field[i])):                                               
-            if field[i][j] == 0:                                                     
-                array_of_squares += add_new_square(i, j)                            
-            elif field[i][j] == 1:                                                   
-                array_of_squares += add_new_square(i, j, "brown")                    
-            #elif field[i][j] == 2:                                                   
-                
-    root.after(f, 10)
-
 
 root = tk.Tk()
 canvas = tk.Canvas(root, height=1000, width=1500)
 canvas.pack()
 sock = take_from_server.init()
 field = take_from_server.return_array(sock)
-f()
-#hole.create_hole(canvas)
+array_of_squares = []
+for i in range(len(field)):                                                      
+        for j in range(len(field[i])):                                               
+            if field[i][j] == 0:                                                     
+                array_of_squares += [add_new_square(i, j)]                    
+            elif field[i][j] == 1:                                                   
+                array_of_squares += [add_new_square(i, j, "brown")]                    
+
 root.mainloop()
