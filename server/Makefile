@@ -1,15 +1,19 @@
 CXX = g++ -Wall -Wextra -Wshadow -std=c++11 -c
+CXX_DEBUG = g++ -g -Wall -Wextra -Wshadow -std=c++11 -c
 LD = g++
 DLLS = -lm -lpthread
 BUILD_DIRECTORY=build build/field_generators
 
 all: app
 
+debug: *
+	g++ -std=c++11 -g *.cpp */*.cpp $(DLLS) -o app_debug
 COMPILE= $(CXX) $< -o $@
 
 app: $(BUILD_DIRECTORY) $(BUILD_DIRECTORY) build/main.o build/world.o build/net.o build/field.o build/player.o build/point.o \
 						build/rand.o build/line.o build/field_generators/empty.o \
-						build/field_generators/random.o build/field_generators/room-filled.o
+						build/field_generators/random.o build/field_generators/room-filled.o \
+						build/field_generators/dfs-ed.o
 	$(LD) build/*.o build/*/*.o $(DLLS) -o app
 #	find build/ -type f -printf '%p ' | xargs -d \  -i $(LD) {} $(DLLS) -o app
 

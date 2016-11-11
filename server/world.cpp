@@ -6,9 +6,10 @@
 
 World::World():
     max_player_id(0), 
-    time(0), 
-    F(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH) 
-    {}
+    time(0)
+    {
+    F = field(WORLD_FIELD_HEIGHT, WORLD_FIELD_WIDTH, field_type::dfs_ed);
+    }
 
 void World::update() {
     for (auto player : players) {
