@@ -18,7 +18,7 @@ void World::update() {
 }
 
 bool polygon_intersect_segment(segment segm, const std::vector <point> & polygon) {
-    for (int i = 0; i < polygon.size(); i++) {
+    for (size_t i = 0; i < polygon.size(); i++) {
         if (segm & segment(polygon[i], polygon[(i + 1) % polygon.size()])) 
             return true;
     }
@@ -40,9 +40,9 @@ double World::search_by_time(point coord, point speed, double max_time) {
         check_time = (max_time + min_time) / 2;
         bool obstructed = false;
         point begin = coord, end = coord + speed * check_time; 
-        for (int i = 0; i < F.height && !obstructed; i++) { 
-            for (int j = 0; j < F.width && !obstructed; j++) { 
-                if (F.data[i][j].type == cell_type::wall) { //Just when it is wall FIXME
+        for (int i = 0; i < F.get_height() && !obstructed; i++) { 
+            for (int j = 0; j < F.get_width() && !obstructed; j++) { 
+                if (F[i][j].type == cell_type::wall) { //Just when it is wall FIXME
                     obstructed = polygon_intersect_segment(segment(begin, end), make_square(i, j));
                 } 
             }
@@ -91,9 +91,9 @@ void World::change_player_state(int player_id, const std::vector<int> & buttons)
 
 int World::add_player() {
    int player_id = max_player_id++;
-   int x = get_rand(0, F.height), y = get_rand(0, F.width);
+   int x = get_rand(0, F.get_height()), y = get_rand(0, F.get_width());
    while (F[x][y].type != cell_type::ground) {
-        x = get_rand(0, F.height), y = get_rand(0, F.width);
+        x = get_rand(0, F.get_height()), y = get_rand(0, F.get_width());
    }
    players[player_id] = std::shared_ptr<player>(new player(x, y));
    return player_id;

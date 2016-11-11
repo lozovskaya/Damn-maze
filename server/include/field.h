@@ -24,26 +24,35 @@ enum class cell_type {
 };
 
 struct cell {
+    int x, y;
     cell_type type;
-    cell(cell_type t=cell_type::ground) : type(t) {
+    cell(int _x=0, int _y=0, cell_type t=cell_type::ground) : x(_x), y(_y), type(t) {
     }
 };
 
-struct field {
-    int height, width;
-    std::vector<std::vector<cell> > data;
-
-
-    field() : height(0), width(0){
-    }
-    field(int h, int w, field_type type=field_type::roomfilled);
+class field {
     void generate_blank_field();
     void generate_random_field();
     void generate_roomfilled_field();
     void make_rooms(std::set<std::pair<int, int> > & corners);
     void room_walls(int x1, int y1, int x2, int y2);
+    int height, width;
+    std::vector<std::vector<cell> > data;
+
+  public:
+    field() : height(0), width(0){
+    }
+    field(int h, int w, field_type type=field_type::roomfilled);
     void write_out(std::ostream& out) const;
     int write_bytes(char* buff) const;
+
+    int get_width() const {
+        return width;
+    }
+
+    int get_height() const {
+        return height;
+    }
     std::vector<cell> &operator[](int i) {
         return data[i];
     }

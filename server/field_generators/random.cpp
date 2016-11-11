@@ -14,15 +14,15 @@ void field::generate_random_field() {
             case 1:
             case 2:
             case 3:
-                data[i][j] = cell(cell_type::wall);
+                data[i][j] = cell(i, j, cell_type::wall);
                 break;
 
             case 4:
-                data[i][j] = cell(cell_type::hole);
+                data[i][j] = cell(i, j, cell_type::hole);
                 break;
 
             default:
-                data[i][j] = cell(cell_type::ground);
+                data[i][j] = cell(i, j, cell_type::ground);
                 break;
             }
         }

@@ -1,13 +1,13 @@
 CXX = g++ -Wall -Wextra -Wshadow -std=c++11 -c
 LD = g++
 DLLS = -lm -lpthread
-BUILD_DIRECTORY=build
+BUILD_DIRECTORY=build build/field_generators
 
 all: app
 
 COMPILE= $(CXX) $< -o $@
 
-app: $(BUILD_DIRECTORY) build build/main.o build/world.o build/net.o build/field.o build/player.o build/point.o \
+app: $(BUILD_DIRECTORY) $(BUILD_DIRECTORY) build/main.o build/world.o build/net.o build/field.o build/player.o build/point.o \
 						build/rand.o build/line.o build/field_generators/empty.o \
 						build/field_generators/random.o build/field_generators/room-filled.o
 	$(LD) build/*.o build/*/*.o $(DLLS) -o app
@@ -43,6 +43,7 @@ build/rand.o: rand.cpp include/rand.h
 
 build:
 	mkdir -p build
+build/field_generators:
 	mkdir -p build/field_generators
 clean:
 	rm -rf build/*

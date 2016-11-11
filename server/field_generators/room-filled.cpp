@@ -3,7 +3,7 @@
 #include <set>
 
 void field::room_walls(int x1, int y1, int x2, int y2) {
-    int entire_pos_x, entire_pos_y, entire_type;
+    int entrance_pos_x, entrance_pos_y, entrance_type;
     if (x1 > x2) {
         std::swap(x1, x2);
     }
@@ -11,22 +11,22 @@ void field::room_walls(int x1, int y1, int x2, int y2) {
         std::swap(y1, y2);
     }
     for (int i = x1; i <= x2; i++) {
-        data[i][y1] = cell(cell_type::wall);
-        data[i][y2] = cell(cell_type::wall);
+        data[i][y1] = cell(i, y1, cell_type::wall);
+        data[i][y2] = cell(i, y2, cell_type::wall);
     }
     for (int i = y1; i <= y2; i++) {
-        data[x1][i] = cell(cell_type::wall);
-        data[x2][i] = cell(cell_type::wall);
+        data[x1][i] = cell(x1, i, cell_type::wall);
+        data[x2][i] = cell(x2, i, cell_type::wall);
     }
-    entire_type = get_rand(0, 1);
-    if (entire_type) {
-        entire_pos_x = get_rand(0, 1) ? x1 : x2;
-        entire_pos_y = get_rand(y1 + 1, y2 - 1);
+    entrance_type = get_rand(0, 1);
+    if (entrance_type) {
+        entrance_pos_x = get_rand(0, 1) ? x1 : x2;
+        entrance_pos_y = get_rand(y1 + 1, y2 - 1);
     } else {
-        entire_pos_x = get_rand(x1 + 1, x2 - 1);
-        entire_pos_y = get_rand(0, 1) ? y1 : y2;
+        entrance_pos_x = get_rand(x1 + 1, x2 - 1);
+        entrance_pos_y = get_rand(0, 1) ? y1 : y2;
     }
-    data[entire_pos_x][entire_pos_y] = cell(cell_type::ground);
+    data[entrance_pos_x][entrance_pos_y] = cell(entrance_pos_x, entrance_pos_y, cell_type::ground);
 }
 
 void field::make_rooms(std::set<std::pair<int, int> > & corners) {
@@ -48,7 +48,7 @@ void field::generate_roomfilled_field() {
     for (int i = 0; i < num_of_holes; i++) {
         hole_x = get_rand(0, height - 1);
         hole_y = get_rand(0, width - 1);
-        data[hole_x][hole_y] = cell(cell_type::hole);
+        data[hole_x][hole_y] = cell(hole_x, hole_y, cell_type::hole);
     }
     make_rooms(room_corners);
 }

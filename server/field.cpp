@@ -9,6 +9,11 @@ field::field(int h, int w, field_type type) {
     height = h;
     width = w;
     data.resize(height, std::vector<cell>(width));
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            data[i][j] = cell(i, j);
+        }
+    }
     switch (type) {
     case field_type::blank:
         generate_blank_field();
