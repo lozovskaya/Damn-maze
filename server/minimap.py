@@ -1,4 +1,5 @@
 import dependencies.png as png
+import os.path
 
 
 def get_color(x):
@@ -26,4 +27,9 @@ for i in range(n):
     isWall[i] = list(map(get_color, map(int, f.readline().rstrip().split())))
 new_array = [[get_pixel(i, j) for j in range(m * width)] for i in range(n * width)]
 
-png.from_array(new_array, "RGBA").save("field.png")
+s = "field.png"
+i = 0
+while os.path.isfile(s):
+    i += 1
+    s = "field" + str(i) + ".png"
+png.from_array(new_array, "RGBA").save(s)

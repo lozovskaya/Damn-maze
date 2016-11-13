@@ -70,9 +70,12 @@ void World::move_player(std::shared_ptr <player> player) {
 
 void World::write_field() const {
     std::ofstream output;
-    output.open("field");
+    output.open("field.txt");
     F.write_out(output);
     output.close();
+  #ifdef _WIN32
+    system("python minimap.py");
+  #endif
 }
 
 size_t World::write_bytes(char* buffer) const {

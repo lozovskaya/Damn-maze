@@ -10,7 +10,7 @@ using namespace std;
 
 
 int main() {
-    srand(2000);
+    srand(time(0));
     World world;
     Net net;
     world.write_field();

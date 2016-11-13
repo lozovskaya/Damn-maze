@@ -35,7 +35,7 @@ struct cell {
         return std::make_pair(x, y);
     }
     bool operator != (const cell &other) const {
-        return x != other.x or y != other.y;
+        return x != other.x || y != other.y;
     }
 };
 
@@ -65,7 +65,7 @@ class field {
   public:
     field() : height(0), width(0){
     }
-    field(int h, int w, field_type type=field_type::roomfilled);
+    field(int h, int w, field_type type=field_type::blank);
     void write_out(std::ostream& out) const;
     int write_bytes(char* buff) const;
 

@@ -1,6 +1,8 @@
-server/field.png
+server/field*.png
 
-server/field
+server/field*.txt
+
+server/field*
 
 server/app
 

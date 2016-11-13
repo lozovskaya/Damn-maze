@@ -6,13 +6,13 @@
 #include <iostream>
 
 bool field::is_free(cell pos, cell prev) const {
-    if (data[pos.x][pos.y].type == cell_type::ground or 
+    if (data[pos.x][pos.y].type == cell_type::ground || 
         data[pos.x][pos.y].type == cell_type::will_be_ground) {
         return false;
     }
     std::vector<cell> neighbours = get_neighbours(pos);
     for (auto c : neighbours) {
-        if (c != prev && (c.type == cell_type::ground or c.type == cell_type::will_be_ground)) {
+        if (c != prev && (c.type == cell_type::ground || c.type == cell_type::will_be_ground)) {
             return false;
         }
     }
@@ -68,6 +68,7 @@ void field::dfs_field(int x, int y) {
         }
     }
     data[x][y].type = cell_type::ground;
+    return;
 }
 
 void field::generate_dfs_field() {

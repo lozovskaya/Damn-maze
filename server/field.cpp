@@ -89,7 +89,7 @@ std::vector<cell> field::get_neighbours_wide(cell pos) const {
     std::vector<cell> neighbours;
     for (int i = -1; i < 2; i++) {
         for (int j = -1; j < 2; j++) {
-            if (i == 0 and j == 0) {
+            if (i == 0 && j == 0) {
                 continue;
             }
             if (is_valid(x + i, y + j)) {
