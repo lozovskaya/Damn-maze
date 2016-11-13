@@ -1,11 +1,12 @@
 #ifndef FIELD_H
 #define FIELD_H
 
+#include <algorithm>
 #include <cstring>
 #include <iostream>
-#include <vector>
 #include <set>
 #include <utility>
+#include <vector>
 
 const static int WORLD_FIELD_WIDTH = 50;
 const static int WORLD_FIELD_HEIGHT = 50;
@@ -23,7 +24,6 @@ enum class cell_type {
     ground = 0,
     wall = 1,
     hole = 2,
-    will_be_ground = 3
 };
 
 struct cell {
@@ -53,13 +53,17 @@ class field {
     void room_walls(int x1, int y1, int x2, int y2);
 
     void generate_dfs_field();
-    void dfs_field(int x, int y);
+    void dfs_field(int x, int y, std::set<std::pair<int, int> > &room_centers);
     cell generate_room(cell pos, int size);
     bool is_free(cell pos, cell prev) const;
 
     bool is_valid(int x, int y) const;
     std::vector<cell> get_neighbours(cell pos) const;
     std::vector<cell> get_neighbours_wide(cell pos) const;
+    template <typename T>
+    std::vector<cell> get_neighbours_if(cell pos, const T& condition) const;
+    template <typename T>
+    std::vector<cell> get_neighbours_wide_if(cell pos, const T& condition) const;
 
 
   public:
@@ -81,4 +85,23 @@ class field {
     }
 };
 
+
+
+template <typename T>
+std::vector<cell> field::get_neighbours_if(cell pos, const T& condition) const {
+    std::vector<cell> good_neighbours, all_neighbours = get_neighbours(pos);
+    good_neighbours.resize(all_neighbours.size());
+    auto last = std::copy_if(all_neighbours.begin(), all_neighbours.end(), good_neighbours.begin(), condition);
+    good_neighbours.resize(distance(good_neighbours.begin(), last));
+    return good_neighbours;
+}
+template <typename T>
+std::vector<cell> field::get_neighbours_wide_if(cell pos, const T& condition) const {
+    std::vector<cell> good_neighbours, all_neighbours = get_neighbours_wide(pos);
+    good_neighbours.resize(all_neighbours.size());
+    auto last = std::copy_if(all_neighbours.begin(), all_neighbours.end(), good_neighbours.begin(), condition);
+    good_neighbours.resize(distance(good_neighbours.begin(), last));
+    return good_neighbours;
+
+}
 #endif // FIELD_H

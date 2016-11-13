@@ -1,11 +1,9 @@
+#pragma comment(linker, "/STACK:100000000")
 #include "include/field.h"
 #include "include/net.h"
 #include "include/point.h"
 #include "include/world.h"
-#include <fstream>
-#include <iostream>
-#include <vector>
-
+#include <cstdlib>
 using namespace std;
 
 

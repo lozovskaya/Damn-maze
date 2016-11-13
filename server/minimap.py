@@ -16,10 +16,7 @@ def get_pixel(i, j):
     else:
         return isWall[i // width][j // width]
 
-try:
-    f = open("field.txt")
-except:
-    f = open("field")
+f = open("field.txt")
 n, m = map(int, f.readline().rstrip().split())
 width = 2000 // (n + m)
 isWall = [0 for i in range(n)]
@@ -28,8 +25,4 @@ for i in range(n):
 new_array = [[get_pixel(i, j) for j in range(m * width)] for i in range(n * width)]
 
 s = "field.png"
-i = 0
-while os.path.isfile(s):
-    i += 1
-    s = "field" + str(i) + ".png"
 png.from_array(new_array, "RGBA").save(s)

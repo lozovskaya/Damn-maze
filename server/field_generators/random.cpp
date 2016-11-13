@@ -1,6 +1,5 @@
 #include "../include/field.h"
 #include "../include/rand.h"
-#include <cstring>
 #include <iostream>
 
 
