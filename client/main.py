@@ -4,13 +4,6 @@ import drawing as dr
 width_of_square = 40
 
 
-def draw_cell(x1, y1, x2, y2):
-    if x2 == -1 and y2 == -1:                               
-        x1, y1 = x1 * width_of_square, y1 * width_of_square
-        x2, y2 = x1 + width_of_square, y1 + width_of_square
-    return (x1 + 20, y1 + 20), (x2 + 20, y2 + 20)
-
-
 def main():
     receive = take_from_server.return_array(sock)
     field = receive[0]
