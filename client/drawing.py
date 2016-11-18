@@ -1,7 +1,5 @@
 import tkinter as tk
 import hole
-import take_from_server
-import time
 width_of_square = 40
 
 
@@ -43,26 +41,3 @@ class drawing:
     def stop_draw(self):
         for i in range(self.index_squares, len(self.array_of_squares)):
             self.canvas.coords(self.array_of_squares[i], -51, -51, -1, -1)
-
-
-def main():
-    receive = take_from_server.return_array(sock)
-    field = receive[0]
-    d.start_draw()
-    for i in range(len(field)):
-        for j in range(len(field[i])):
-            if field[i][j] == 0:
-                d.draw_square(j, i, "white")
-            elif field[i][j] == 1:
-                d.draw_square(j, i, "brown")
-            elif field[i][j] == 2:
-                d.draw_hole(j, i)
-    d.stop_draw()
-    root.after(50, main)
-
-
-root = tk.Tk()
-d = drawing(root)
-sock = take_from_server.init()
-main()
-root.mainloop()

@@ -29,6 +29,7 @@ int Net::get_data_timeout(SOCKET client_socket, size_t len, int sec, int usec) {
 }
 
 Net::Net() {
+    buffer = new char[BUFF_SIZE];
   #ifdef _WIN32
     if (WSAStartup(MAKEWORD(2, 2), (WSADATA *)&buffer[0]))
     {
@@ -61,6 +62,7 @@ Net::~Net() {
   #ifdef _WIN32
     WSACleanup();
   #endif
+  delete[] buffer;
   shutdown(my_socket, SHUT_RDWR);
 }
 
@@ -92,7 +94,7 @@ int Net::update_processing_keys(World &world) {
     std::vector<int> buttons_pressed;
     write_value(&player_id, current_ptr);
     write_vector(buttons_pressed, current_ptr);
-    world.update_player(player_id, buttons_pressed);
+    world.change_player_state(player_id, buttons_pressed);
     buffer[0] = MSG_OK;
     return 1;
 }

@@ -13,18 +13,27 @@ def init():
         exit(0)
     return sock
 
+
 def return_array(sock):
     sock.send(bytearray([1]), socket.MSG_CONFIRM)
     #it's a query for server, it understands, that we need field after that message
-    data = sock.recv(255, socket.MSG_CONFIRM)
+    data = sock.recv(1024 * 1024, socket.MSG_CONFIRM)
     curr_idx = 0
     height = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
     curr_idx += 4
     width = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
     curr_idx += 4
-    arr = [[0] * width for i in range(height)]
+    field = [[0] * width for i in range(height)]
     for i in range(height):
         for j in range(width):
-            arr[i][j] = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
+            field[i][j] = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
             curr_idx += 4
-    return arr
+    count = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
+    curr_idx += 4
+    list_of_coords = [0] * count
+    for i in range(count):
+        x = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
+        y = int.from_bytes(data[curr_idx + 4:curr_idx + 8], byteorder)
+        list_of_coords[i] = (x, y)
+        curr_idx += 8
+    return field, list_of_coords

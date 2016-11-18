@@ -22,6 +22,9 @@ struct point {
 
     double sqlength() const;
 
+    point operator - () const;
+    point operator + () const;
+
     point operator + (const point &other) const;
     point operator - (const point &other) const;
     point operator * (const double &other) const;
@@ -44,5 +47,7 @@ struct point {
 point rotate(const point &a, const point& center, double angle);
 
 double distance(const point &a, const point &b);
+
+typedef point vector;
 
 #endif // POINT_H

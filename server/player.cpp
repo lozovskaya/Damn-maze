@@ -10,7 +10,7 @@ size_t player::write_bytes(char* buffer) const {
     return sizeof(point);
 }
 
-void player::move(const std::vector<int> &buttons) {
+void player::change_state(const std::vector<int> &buttons) {
     for (int c : buttons) {
         switch (c) {
         case 'w':
@@ -28,3 +28,16 @@ void player::move(const std::vector<int> &buttons) {
         }
     }
 }
+
+point player::get_coord() const {
+    return coord;
+}
+
+point player::get_speed() const {
+    return speed;
+}
+
+void player::move(double t) {
+    coord += speed * t;
+}
+

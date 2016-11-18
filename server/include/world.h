@@ -4,20 +4,31 @@
 #include "field.h"
 #include "player.h"
 #include "point.h"
+#include "line.h"
 #include <map>
 #include <memory>
 #include <vector>
+#include <cmath>
+#include <algorithm>
+#include <ctime>
 
 
 class World {
     int max_player_id;
+    double time;
     std::map<int, std::shared_ptr<player> > players;
     field F;
 
+    
+    double time_of_movement(point coord, point speed);
+    void move_player(std::shared_ptr <player> player);
+    double search_by_time(point coord, point speed, double max_time); 
+
   public:
     World();
+    void update();
+    void change_player_state(int player_id, const std::vector<int> &buttons);
     void write_field() const;
-    void update_player(int player_id, const std::vector<int> &buttons);
     int add_player();
     size_t write_bytes(char* buffer) const;
 };

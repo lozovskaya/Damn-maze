@@ -6,12 +6,16 @@
 #include <vector>
 
 class player {
-    point coord;
+    point coord; 
+    point speed; 
   public:
     player();
     player(int x, int y);
     size_t write_bytes(char* buffer) const;
-    void move(const std::vector<int> &buffer);
+    void change_state(const std::vector<int> &buffer);
+    point get_coord() const;
+    point get_speed() const;
+    void move(double t);
 };
 
 #endif // PLAYER_H

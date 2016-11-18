@@ -1,7 +1,15 @@
-server/field.png
-server/field
+server/field*.png
+
+server/field*.txt
+
+server/field*
+
 server/app
+
 server/build
+
 server/dependencies/__pycache__
+
 client/__pycache__
+
 net_examples/server
