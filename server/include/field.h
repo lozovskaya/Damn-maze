@@ -7,8 +7,8 @@
 #include <set>
 #include <utility>
 
-const static int WORLD_FIELD_WIDTH = 50;
-const static int WORLD_FIELD_HEIGHT = 50;
+const static int WORLD_FIELD_WIDTH = 22;
+const static int WORLD_FIELD_HEIGHT = 20;
 const static int CELL_WIDTH = 10;
 const static int CELL_HEIGHT = 10;
 
