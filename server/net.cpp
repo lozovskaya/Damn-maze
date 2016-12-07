@@ -111,12 +111,10 @@ void Net::update_one_client(SOCKET client_socket, World &world) {
         break;
 
       case MSG_GET_DRAW_DATA:
-        printf("send\n");
         size = world.write_bytes(buffer);
         break;
 
       case MSG_PLAYER_MOVE:
-        printf("Player moving\n");
         size = update_processing_keys(world);
         break;
 

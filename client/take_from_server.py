@@ -14,9 +14,15 @@ def init():
     return sock
 
 
-def return_array(sock):
+def return_my_id(sock):
+    sock.send(bytearray([0]), socket.MSG_CONFIRM)
+    my_id = sock.recv(4, socket.MSG_CONFIRM)
+    my_id = int.from_bytes(my_id, byteorder)
+    return my_id
+
+
+def what_draw(sock):
     sock.send(bytearray([1]), socket.MSG_CONFIRM)
-    #it's a query for server, it understands, that we need field after that message
     data = sock.recv(1024 * 1024, socket.MSG_CONFIRM)
     curr_idx = 0
     height = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)

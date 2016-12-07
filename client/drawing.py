@@ -16,9 +16,8 @@ class drawing:
         if self.index_squares < len(self.array_of_squares):
             self.canvas.coords(self.array_of_squares[self.index_squares], x1, y1, x2, y2)
         else:
-            new_square = self.canvas.create_rectangle(x1, y1,
-                                                      x2, y2,
-                                                 outline="black", fill=colour)
+            new_square = self.canvas.create_rectangle(x1, y1, x2, y2,
+                                                      outline="black", fill=colour)
             self.array_of_squares.append(new_square)
         self.index_squares += 1
     

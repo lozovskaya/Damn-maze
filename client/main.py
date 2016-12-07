@@ -4,6 +4,10 @@ import drawing as dr
 width_of_square = 40
 
 
+def char_func(arg):
+    print("You have pressed that", str(arg.keysym), "with code:", arg.keysym_num)
+
+
 def draw_cell(dr, x, y, colour):
     x1, y1 = x * width_of_square, y * width_of_square
     x2, y2 = x1 + width_of_square, y1 + width_of_square
@@ -11,7 +15,7 @@ def draw_cell(dr, x, y, colour):
 
 
 def main():
-    receive = take_from_server.return_array(sock)
+    receive = take_from_server.what_draw(sock)
     field = receive[0]
     d.start_draw()
     for i in range(len(field)):
@@ -29,5 +33,7 @@ def main():
 root = tk.Tk()
 d = dr.drawing(root)
 sock = take_from_server.init()
+my_id = take_from_server.return_my_id(sock)
 main()
+root.bind("<Key>", char_func)
 root.mainloop()

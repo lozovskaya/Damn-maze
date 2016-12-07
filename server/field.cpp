@@ -51,8 +51,8 @@ int field::write_bytes(char* buff) const {
     buff += 2 * sizeof(int);
     for (const auto &v : data) {
         for (const auto &elem : v) {
-            memcpy(buff, &elem, sizeof(elem));
-            buff += sizeof(elem);
+            memcpy(buff, &elem.type, sizeof(elem.type));
+            buff += sizeof(elem.type);
         }
     }
     return buff - last;

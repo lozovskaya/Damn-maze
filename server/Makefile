@@ -11,7 +11,7 @@ debug: *
 COMPILE= $(CXX) $< -o $@
 
 app: $(BUILD_DIRECTORY) $(BUILD_DIRECTORY) build/main.o build/world.o build/net.o build/field.o build/player.o build/point.o \
-						build/rand.o build/line.o build/field_generators/empty.o \
+						build/rand.o build/line.o build/field_generators/blank.o \
 						build/field_generators/random.o build/field_generators/room-filled.o \
 						build/field_generators/dfs-ed.o
 	$(LD) build/*.o build/*/*.o $(DLLS) -o app
