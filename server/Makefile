@@ -1,7 +1,7 @@
-CXX = g++ -Wall -Wextra -Wshadow -std=c++11 -c
+CXX = g++ -Wall -Wextra -Wshadow -std=c++14 -c
 CXX_DEBUG = g++ -g -Wall -Wextra -Wshadow -std=c++11 -c
 LD = g++
-DLLS = -lm -lpthread
+DLLS = -lm -lpthread -lws2_32
 BUILD_DIRECTORY=build build/field_generators
 
 all: app

@@ -15,9 +15,9 @@ def init():
 
 
 def return_array(sock):
-    sock.send(bytearray([1]), socket.MSG_CONFIRM)
+    sock.send(bytearray([1]))
     #it's a query for server, it understands, that we need field after that message
-    data = sock.recv(1024 * 1024, socket.MSG_CONFIRM)
+    data = sock.recv(1024 * 1024)
     curr_idx = 0
     height = int.from_bytes(data[curr_idx:curr_idx + 4], byteorder)
     curr_idx += 4

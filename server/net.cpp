@@ -52,9 +52,7 @@ Net::Net() {
     }
     printf("port = %d\n", PORT + i);
     listen(my_socket, 5);
-    std::thread
-    accepting_thread(accept_new_clients,
-    std::ref(*this));
+    std::thread accepting_thread(accept_new_clients, std::ref(*this));
     accepting_thread.detach();
 }
 
